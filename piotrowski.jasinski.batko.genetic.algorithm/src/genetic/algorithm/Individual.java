@@ -13,6 +13,7 @@ public class Individual
 	private int width, height;	// width and height should be lower than width and height original image
 	private int positionX, positionY;	// also should be somewhere on a image (minus width and height)
 	private Color color; // set as RGB value, 0-255
+	private int x;
 	
 	public Individual(int width, int height, int positionX, int positionY, Color color)
 	{
