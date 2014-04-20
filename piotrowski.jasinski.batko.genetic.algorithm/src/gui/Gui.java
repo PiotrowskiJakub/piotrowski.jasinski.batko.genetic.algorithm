@@ -19,7 +19,8 @@ import javax.swing.JTextField;
 /**
  * 
  * @author Jakub Piotrowski
- * @version 1.0 Class to display graphical user interface.
+ * @version 1.0 
+ * Class to display graphical user interface.
  */
 public class Gui extends JFrame
 {
@@ -28,10 +29,11 @@ public class Gui extends JFrame
 	private JPanel mainPanel;
 	private JLabel label1, label2, label3, label4, label5, label6,
 			lab_pokolenie, lab_numpok, lab_dopasowanie, lab_numdop;
-	private JTextField text1, text2, text3, text4, text5, text6;
+	private JTextField tex_imagePath, tex_populationSize, tex_eliteSize,
+			tex_numOfElements, tex_mutationProbability, tex_mutationSize;
 	private JButton load, start, stop;
-	private ImagePanel imagePanel;
-	private MyDrawPanel drawPanel;
+	private OrginalImage orginalImage;
+	private OutputImage outputImage;
 	private File imagePath;
 
 	public static void main(String[] args)
@@ -50,7 +52,7 @@ public class Gui extends JFrame
 		// 1 row
 		label1 = new JLabel("Image: ");
 		label1.setPreferredSize(new Dimension(200, 50));
-		text1 = new JTextField(10);
+		tex_imagePath = new JTextField(10);
 		load = new JButton("Load image");
 		load.addActionListener(new LoadListener());
 		c.gridx = 0;
@@ -58,7 +60,7 @@ public class Gui extends JFrame
 		mainPanel.add(label1, c);
 		c.gridx = 1;
 		c.gridy = 0;
-		mainPanel.add(text1, c);
+		mainPanel.add(tex_imagePath, c);
 		c.gridx = 2;
 		c.gridy = 0;
 		mainPanel.add(load, c);
@@ -66,58 +68,58 @@ public class Gui extends JFrame
 		// 2 row
 		label2 = new JLabel("Size of population: ");
 		label2.setPreferredSize(new Dimension(200, 50));
-		text2 = new JTextField("50", 10);
+		tex_populationSize = new JTextField("50", 10);
 		// text2.setPreferredSize(new Dimension(50, 20));
 		c.gridx = 0;
 		c.gridy = 2;
 		mainPanel.add(label2, c);
 		c.gridx = 1;
 		c.gridy = 2;
-		mainPanel.add(text2, c);
+		mainPanel.add(tex_populationSize, c);
 
 		// 3 row
 		label3 = new JLabel("Size of elite: ");
 		label3.setPreferredSize(new Dimension(200, 50));
-		text3 = new JTextField("10", 10);
+		tex_eliteSize = new JTextField("10", 10);
 		c.gridx = 0;
 		c.gridy = 3;
 		mainPanel.add(label3, c);
 		c.gridx = 1;
 		c.gridy = 3;
-		mainPanel.add(text3, c);
+		mainPanel.add(tex_eliteSize, c);
 
 		// 4 row
 		label4 = new JLabel("Number of elements: ");
 		label4.setPreferredSize(new Dimension(200, 50));
-		text4 = new JTextField("200", 10);
+		tex_numOfElements = new JTextField("200", 10);
 		c.gridx = 0;
 		c.gridy = 4;
 		mainPanel.add(label4, c);
 		c.gridx = 1;
 		c.gridy = 4;
-		mainPanel.add(text4, c);
+		mainPanel.add(tex_numOfElements, c);
 
 		// 5 row
 		label5 = new JLabel("The probability of mutation: ");
 		label5.setPreferredSize(new Dimension(200, 50));
-		text5 = new JTextField("0.1", 10);
+		tex_mutationProbability = new JTextField("0.1", 10);
 		c.gridx = 0;
 		c.gridy = 5;
 		mainPanel.add(label5, c);
 		c.gridx = 1;
 		c.gridy = 5;
-		mainPanel.add(text5, c);
+		mainPanel.add(tex_mutationProbability, c);
 
 		// 6 row
 		label6 = new JLabel("Size of mutations (1-100): ");
 		label6.setPreferredSize(new Dimension(200, 50));
-		text6 = new JTextField("10.0", 10);
+		tex_mutationSize = new JTextField("10.0", 10);
 		c.gridx = 0;
 		c.gridy = 6;
 		mainPanel.add(label6, c);
 		c.gridx = 1;
 		c.gridy = 6;
-		mainPanel.add(text6, c);
+		mainPanel.add(tex_mutationSize, c);
 
 		// 7 row
 		start = new JButton("Start");
@@ -131,14 +133,14 @@ public class Gui extends JFrame
 		mainPanel.add(stop, c);
 
 		// 8 row
-		imagePanel = new ImagePanel();
-		drawPanel = new MyDrawPanel();
+		orginalImage = new OrginalImage();
+		outputImage = new OutputImage();
 		c.gridx = 0;
 		c.gridy = 8;
-		mainPanel.add(imagePanel, c);
+		mainPanel.add(orginalImage, c);
 		c.gridx = 1;
 		c.gridy = 8;
-		mainPanel.add(drawPanel, c);
+		mainPanel.add(outputImage, c);
 
 		// 9 row
 		lab_pokolenie = new JLabel("Generation: ");
@@ -182,13 +184,14 @@ public class Gui extends JFrame
 						JOptionPane.ERROR_MESSAGE);
 			else
 			{
-				imagePanel.drawImage(imagePath);
-				imagePanel.setPreferredSize(new Dimension(
-						imagePanel.getWidth(), imagePanel.getHeight()));
+				orginalImage.drawImage(imagePath);
+				orginalImage.setPreferredSize(new Dimension(
+						orginalImage.getWidth(), orginalImage.getHeight()));
 				
-				drawPanel.setWidth(imagePanel.getWidth());
-				drawPanel.setHeight(imagePanel.getHeight());
-				drawPanel.setPreferredSize(new Dimension(imagePanel.getWidth(), imagePanel.getHeight()));
+				outputImage.setNumOfElements(Integer.parseInt(tex_numOfElements.getText()));
+				outputImage.setWidth(orginalImage.getWidth());
+				outputImage.setHeight(orginalImage.getHeight());
+				outputImage.setPreferredSize(new Dimension(orginalImage.getWidth(), orginalImage.getHeight()));
 				
 				Gui.this.repaint();
 				Gui.this.pack();
@@ -207,7 +210,7 @@ public class Gui extends JFrame
 			JFileChooser chooser = new JFileChooser("img/");
 			chooser.showOpenDialog(Gui.this);
 			imagePath = chooser.getSelectedFile();
-			text1.setText(imagePath.getName());
+			tex_imagePath.setText(imagePath.getName());
 		}
 	}
 }

@@ -14,7 +14,7 @@ import javax.swing.JPanel;
  * @version 1.0
  * Class to display image.
  */
-public class ImagePanel extends JPanel
+public class OrginalImage extends JPanel
 {
 	private static final long serialVersionUID = 3006769532505931833L;
 	private BufferedImage image;
@@ -41,6 +41,11 @@ public class ImagePanel extends JPanel
 	{
 		super.paintComponent(g);
 		g.drawImage(image, 0, 0, null);
+	}
+
+	public BufferedImage getImage()
+	{
+		return image;
 	}
 
 	public int getWidth()

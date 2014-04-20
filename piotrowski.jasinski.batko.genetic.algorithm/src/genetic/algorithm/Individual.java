@@ -10,27 +10,21 @@ import java.awt.Color;
  */
 public class Individual
 {
-	private int width, height;	// width and height should be lower than width and height original image
+	private int radius;	// radius should be lower than width and height original image
 	private int positionX, positionY;	// also should be somewhere on a image (minus width and height)
 	private Color color; // set as RGB value, 0-255
 	
-	public Individual(int width, int height, int positionX, int positionY, Color color)
+	public Individual(int radius, int positionX, int positionY, Color color)
 	{
-		this.width = width;
-		this.height = height;
+		this.radius = radius;
 		this.positionX = positionX;
 		this.positionY = positionY;
 		this.color = color;
 	}
 
-	public int getWidth()
+	public int getRadius()
 	{
-		return width;
-	}
-
-	public int getHeight()
-	{
-		return height;
+		return radius;
 	}
 
 	public int getPositionX()
