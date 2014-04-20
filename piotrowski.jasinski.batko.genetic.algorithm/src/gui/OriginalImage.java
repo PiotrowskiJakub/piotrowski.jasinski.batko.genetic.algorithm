@@ -12,12 +12,12 @@ import javax.swing.JPanel;
  * 
  * @author Jakub Piotrowski
  * @version 1.0
- * Class to display image.
+ * Class to display original image.
  */
-public class OrginalImage extends JPanel
+public class OriginalImage extends JPanel
 {
 	private static final long serialVersionUID = 3006769532505931833L;
-	private BufferedImage image;
+	private BufferedImage image;	// original image as BufferedImage
 	private int width, height;
 	
 	public void drawImage(File file)

@@ -32,7 +32,7 @@ public class Gui extends JFrame
 	private JTextField tex_imagePath, tex_populationSize, tex_eliteSize,
 			tex_numOfElements, tex_mutationProbability, tex_mutationSize;
 	private JButton load, start, stop;
-	private OrginalImage orginalImage;
+	private OriginalImage originalImage;
 	private OutputImage outputImage;
 	private File imagePath;
 
@@ -133,11 +133,11 @@ public class Gui extends JFrame
 		mainPanel.add(stop, c);
 
 		// 8 row
-		orginalImage = new OrginalImage();
+		originalImage = new OriginalImage();
 		outputImage = new OutputImage();
 		c.gridx = 0;
 		c.gridy = 8;
-		mainPanel.add(orginalImage, c);
+		mainPanel.add(originalImage, c);
 		c.gridx = 1;
 		c.gridy = 8;
 		mainPanel.add(outputImage, c);
@@ -184,14 +184,14 @@ public class Gui extends JFrame
 						JOptionPane.ERROR_MESSAGE);
 			else
 			{
-				orginalImage.drawImage(imagePath);
-				orginalImage.setPreferredSize(new Dimension(
-						orginalImage.getWidth(), orginalImage.getHeight()));
+				originalImage.drawImage(imagePath);
+				originalImage.setPreferredSize(new Dimension(
+						originalImage.getWidth(), originalImage.getHeight()));
 				
 				outputImage.setNumOfElements(Integer.parseInt(tex_numOfElements.getText()));
-				outputImage.setWidth(orginalImage.getWidth());
-				outputImage.setHeight(orginalImage.getHeight());
-				outputImage.setPreferredSize(new Dimension(orginalImage.getWidth(), orginalImage.getHeight()));
+				outputImage.setWidth(originalImage.getWidth());
+				outputImage.setHeight(originalImage.getHeight());
+				outputImage.setPreferredSize(new Dimension(originalImage.getWidth(), originalImage.getHeight()));
 				
 				Gui.this.repaint();
 				Gui.this.pack();
