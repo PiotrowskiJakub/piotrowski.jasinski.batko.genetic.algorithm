@@ -176,7 +176,8 @@ public class Algorithm
 				
 			}
 			
-			_elements.add(pat);
+			Individual newElements = new Individual(_radius, _positionX, _positionY, new Color(_red,_green,_blue));
+			_elements.add(newElements);
 		}
 		
 		return new OutputImage(width, height, pattern.getNumOfElements(), pattern.getImage(), _elements);	
