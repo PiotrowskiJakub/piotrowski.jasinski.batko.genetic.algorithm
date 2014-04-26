@@ -179,9 +179,7 @@ public class Algorithm
 			_elements.add(pat);
 		}
 		
-		
-		return new OutputImage(width, height, pattern.getNumOfElements(), pattern.getImage(), _elements);
-		
+		return new OutputImage(width, height, pattern.getNumOfElements(), pattern.getImage(), _elements);	
 		
 	}
 	
@@ -198,8 +196,56 @@ public class Algorithm
 	}
 	
 	public void evolution(){
-		
+		LinkedList<OutputImage> elites = new LinkedList<OutputImage>();
+		int generation = 0; //TA ZMIENNA MUSI BYC DOSTEPNA CALY CZAS
+		while(true){
+			generation++;
+			for (int i=0; i < eliteSize; i++)
+			{
+				double currentBest = compareImage(outputs.get(i).getImage());
+				int currentBestIndex = 0;
+				for (int j=1; j<populationSize-i; j++)
+				{
+					if (currentBest < compareImage(outputs.get(j).getImage()))
+					{
+						currentBest = compareImage(outputs.get(j).getImage());
+						currentBestIndex = j;
+						
+					}
+				}	
+				//add to elite
+				elites.add(outputs.get(currentBestIndex));
+				outputs.add(currentBestIndex,outputs.get(populationSize-i-1));
+			}
+			
+			
+			//create next generation
+			//outputs.clear();
+			int i = 0;
+			int mother = 0;
+			int father = 0;
+			while (i<populationSize)
+			{
+				if (mother != father)
+				{
+					outputs.add(i,mutation(hybridization(elites.get(mother), elites.get(father))));
+					//geneticImages[i] = reproduct(eliteImages[mother], eliteImages[father]);
+					i++;
+					if (i >= populationSize) break;
+				}
+				
+				father++;
+				if (father >= eliteSize)
+				{
+					mother++;
+					father = 0;
+				}
+				if (mother >= eliteSize)
+				{
+					mother = 0;
+					father = 1;
+				}
+			}
+		}
 	}
-	
-	
 }
