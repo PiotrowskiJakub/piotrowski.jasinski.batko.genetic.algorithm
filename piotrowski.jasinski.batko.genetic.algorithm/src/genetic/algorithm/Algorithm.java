@@ -6,7 +6,7 @@ import gui.OutputImage;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
-import java.lang.Math;
+import java.util.Random;
 
 /**
  * 
@@ -33,6 +33,28 @@ public class Algorithm
 		this.originalImage = originalImage;
 		
 		// Here create first random population
+		
+		for(int i = 0; i < populationSize; i++){
+			outputs.add(geneticImage((numOfElements)));
+		}
+		
+		
+		
+	}
+	
+	private OutputImage geneticImage(int numOfElements){
+		LinkedList<Individual> elements = new LinkedList<Individual>();
+		Random rand = new Random();
+		float r = rand.nextFloat();
+		float g = rand.nextFloat();
+		float b = rand.nextFloat();
+		float a = rand.nextFloat();
+		Color randomColor = new Color(r, g, b);
+		int width = originalImage.getWidth();
+		int height = originalImage.getHeight();
+		elements.add(new Individual(rand.nextInt()*3, rand.nextInt()*width, rand.nextInt()*height, randomColor));
+		BufferedImage member = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		return new OutputImage(width, height, numOfElements, member, elements);
 	}
 	
 	private double compareImage(BufferedImage outputImage){
@@ -107,6 +129,76 @@ public class Algorithm
 		}
 		
 		return new OutputImage(width, height, numOfElements, child, elements);
+	}
+	
+	private OutputImage mutation(OutputImage pattern){
+		
+		LinkedList<Individual> _elements = new LinkedList<Individual>();
+		int width = pattern.getWidth();
+		int height = pattern.getHeight();
+		
+		for(Individual pat : pattern.getElements()){
+			int _positionX = pat.getPositionX();
+			int _positionY = pat.getPositionY();
+			int _radius = pat.getRadius();
+			int _red = pat.getColor().getRed();
+			int _green = pat.getColor().getGreen();
+			int _blue = pat.getColor().getBlue();
+			
+			mutationSize = Math.random();
+			double noChangesProbability = 1.0 - mutationProbability;
+			double parameterMutationProbability = mutationProbability / 3.0;
+			
+			if (mutationSize < (noChangesProbability + parameterMutationProbability)){
+				_positionX += gaussRandom()*width;
+				if (_positionX > width) _positionX = width;
+				else if (_positionX < 0) _positionX = 0;
+				
+				_positionY += gaussRandom()*height;
+				if (_positionY > height) _positionY = height;
+				else if (_positionY < 0) _positionY = 0;
+			} else if (mutationSize < noChangesProbability + 2.0 * parameterMutationProbability){
+				_radius += gaussRandom()*((width+height)/4.0);
+				if (_radius > ((width+height)/2.0)) _radius = (int)((width+height)/2.0);
+				else if (_radius < 0) _radius = 0;
+			} else {	
+				_red += gaussRandom()*255;
+				if (_red > 255) _red = 255;
+				else if (_red < 0) _red = 0;
+			
+				_green += gaussRandom()*255;
+				if (_green > 255) _green = 255;
+				else if (_green < 0) _green = 0;
+				
+				_blue += gaussRandom()*255;
+				if (_blue > 255) _blue = 255;
+				else if (_blue < 0) _blue = 0;
+				
+			}
+			
+			_elements.add(pat);
+		}
+		
+		
+		return new OutputImage(width, height, pattern.getNumOfElements(), pattern.getImage(), _elements);
+		
+		
+	}
+	
+	private double gaussRandom(){
+			double x = Math.random();
+			double y = Math.random();
+			
+			double r = 0.003 * mutationSize * Math.sqrt(-2.0 * Math.log(x)) * Math.cos(2.0 * Math.PI * y);
+			if (r<-1.0) 
+				r=0;
+			if (r>1.0) 
+				r=0;
+			return r;		
+	}
+	
+	public void evolution(){
+		
 	}
 	
 	
