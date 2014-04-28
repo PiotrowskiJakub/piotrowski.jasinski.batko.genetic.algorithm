@@ -19,7 +19,6 @@ public class OutputImage extends JPanel
 {
 	private static final long serialVersionUID = -6184846121081330233L;
 	private int width, height, numOfElements;
-	private BufferedImage outputImage;
 	private LinkedList<Individual> elements = new LinkedList<Individual>(); // we draw all elements in this list on output image
 	
 	/*********************************************************************************************************************************************************** */
@@ -44,11 +43,6 @@ public class OutputImage extends JPanel
 		this.elements = elements;
 	}
 	
-	public void setImage(BufferedImage outputImage)
-	{
-		this.outputImage = outputImage;
-	}
-	
 	/*********************************************************************************************************************************************************** */
 	
 	public int getWidth()
@@ -69,11 +63,6 @@ public class OutputImage extends JPanel
 	public LinkedList<Individual> getElements()
 	{
 		return elements;
-	}
-	
-	public BufferedImage getImage()
-	{
-		return outputImage;
 	}
 	
 	/*********************************************************************************************************************************************************** */
@@ -110,14 +99,13 @@ public class OutputImage extends JPanel
 	 * 
 	 * Constructors
 	 */
-	public OutputImage(int width, int height, int numOfElements, BufferedImage outputImage, LinkedList<Individual> elements){
+	public OutputImage(int width, int height, int numOfElements, LinkedList<Individual> elements){
 		setWidth(width);
 		setHeight(height);
 		setNumOfElements(numOfElements);
 		setElements(elements);
-		setImage(outputImage);
 	}
 	
-	public OutputImage(){ }
+	public OutputImage(){}
 	
 }

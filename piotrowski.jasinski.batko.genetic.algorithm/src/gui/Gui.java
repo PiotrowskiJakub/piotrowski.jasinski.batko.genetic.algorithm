@@ -1,5 +1,7 @@
 package gui;
 
+import genetic.algorithm.Algorithm;
+
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -19,8 +21,7 @@ import javax.swing.JTextField;
 /**
  * 
  * @author Jakub Piotrowski
- * @version 1.0 
- * Class to display graphical user interface.
+ * @version 1.0 Class to display graphical user interface.
  */
 public class Gui extends JFrame
 {
@@ -35,6 +36,7 @@ public class Gui extends JFrame
 	private OriginalImage originalImage;
 	private OutputImage outputImage;
 	private File imagePath;
+	private Algorithm algorithm;
 
 	public static void main(String[] args)
 	{
@@ -185,19 +187,36 @@ public class Gui extends JFrame
 			else
 			{
 				originalImage.drawImage(imagePath);
-				originalImage.setPreferredSize(new Dimension(
-						originalImage.getWidth(), originalImage.getHeight()));
+				originalImage.setPreferredSize(new Dimension(originalImage
+						.getWidth(), originalImage.getHeight()));
+
+				algorithm = new Algorithm(Integer.parseInt(tex_populationSize
+						.getText()), Integer.parseInt(tex_eliteSize.getText()),
+						Integer.parseInt(tex_numOfElements.getText()),
+						Double.parseDouble(tex_mutationProbability.getText()),
+						Double.parseDouble(tex_mutationSize.getText()),
+						originalImage);
 				
-				outputImage.setNumOfElements(Integer.parseInt(tex_numOfElements.getText()));
+				outputImage.setNumOfElements(Integer.parseInt(tex_numOfElements
+						.getText()));
 				outputImage.setWidth(originalImage.getWidth());
 				outputImage.setHeight(originalImage.getHeight());
-				outputImage.setPreferredSize(new Dimension(originalImage.getWidth(), originalImage.getHeight()));
+				outputImage.setElements(algorithm.randomImage().getElements());
+				outputImage.setPreferredSize(new Dimension(originalImage
+						.getWidth(), originalImage.getHeight()));
 				
 				Gui.this.repaint();
 				Gui.this.pack();
 				Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 				Gui.this.setLocation(dim.width / 2 - Gui.this.getSize().width
 						/ 2, dim.height / 2 - Gui.this.getSize().height / 2);
+				
+				//Seba jak naprawisz funkcję evolution, to sobie to odkomentuj
+//				for(int i = 0; i < 5; i++)
+//				{
+//					outputImage.setElements(algorithm.evolution().getElements());
+//					Gui.this.repaint();
+//				}
 			}
 		}
 	}
