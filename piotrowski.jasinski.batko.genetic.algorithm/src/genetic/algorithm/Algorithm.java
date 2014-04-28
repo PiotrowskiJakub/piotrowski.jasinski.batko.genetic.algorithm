@@ -196,10 +196,10 @@ public class Algorithm
 			return r;		
 	}
 	
-	public void evolution(){
+	public OutputImage evolution(){
 		LinkedList<OutputImage> elites = new LinkedList<OutputImage>();
+		int nowBestIndex = 0; //tutaj najlepszy obraz danej populacji
 		int generation = 0; //TA ZMIENNA MUSI BYC DOSTEPNA CALY CZAS
-		while(true){
 			generation++;
 			for (int i=0; i < eliteSize; i++)
 			{
@@ -219,9 +219,15 @@ public class Algorithm
 				outputs.add(currentBestIndex,outputs.get(populationSize-i-1));
 			}
 			
+			for(int i = 0; i < elites.size()-1; i++){
+				if(compareImage(elites.get(nowBestIndex).getImage()) < compareImage(elites.get(i).getImage())){
+					nowBestIndex = i;
+				}		
+			}
+			
 			
 			//create next generation
-			//outputs.clear();
+			outputs.clear();
 			int i = 0;
 			int mother = 0;
 			int father = 0;
@@ -229,7 +235,7 @@ public class Algorithm
 			{
 				if (mother != father)
 				{
-					outputs.add(i,mutation(hybridization(elites.get(mother), elites.get(father))));
+					outputs.add(mutation(hybridization(elites.get(mother), elites.get(father))));
 					//geneticImages[i] = reproduct(eliteImages[mother], eliteImages[father]);
 					i++;
 					if (i >= populationSize) break;
@@ -247,6 +253,6 @@ public class Algorithm
 					father = 1;
 				}
 			}
-		}
+		return elites.get(nowBestIndex);
 	}
 }
