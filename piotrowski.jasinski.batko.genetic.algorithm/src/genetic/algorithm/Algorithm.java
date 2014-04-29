@@ -240,8 +240,6 @@ public class Algorithm
 	{
 		LinkedList<OutputImage> elites = new LinkedList<OutputImage>();
 		int nowBestIndex = 0; // tutaj najlepszy obraz danej populacji
-		int generation = 0; // TA ZMIENNA MUSI BYC DOSTEPNA CALY CZAS
-		generation++;
 		for (int i = 0; i < eliteSize; i++)
 		{
 			double currentBest = compareImage(outputs.get(0).convertToImage());
