@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -211,16 +212,10 @@ public class Gui extends JFrame
 				Gui.this.setLocation(dim.width / 2 - Gui.this.getSize().width
 						/ 2, dim.height / 2 - Gui.this.getSize().height / 2);
 				
-				//Seba jak naprawisz funkcję evolution, to sobie to odkomentuj
-//				for(int i = 0; i < 5; i++)
-//				{
-//					outputImage.setElements(algorithm.evolution().getElements());
-//					Gui.this.repaint();
-//				}
 			}
 		}
 	}
-
+	
 	private class LoadListener implements ActionListener
 	{
 		@Override

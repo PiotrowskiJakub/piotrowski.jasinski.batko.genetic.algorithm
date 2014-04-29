@@ -45,16 +45,15 @@ public class Algorithm
 	{
 		LinkedList<Individual> elements = new LinkedList<Individual>();
 		Random rand = new Random();
-		float r = rand.nextFloat();
-		float g = rand.nextFloat();
-		float b = rand.nextFloat();
-		Color randomColor = new Color(r, g, b);
 		int width = originalImage.getWidth();
 		int height = originalImage.getHeight();
 		for (int i = 0; i < numOfElements; i++)
 		{
-			elements.add(new Individual(rand.nextInt(30) * 3, rand.nextInt(10)
-					* width, rand.nextInt(10) * height, randomColor));
+			float r = rand.nextFloat();
+			float g = rand.nextFloat();
+			float b = rand.nextFloat();
+			Color randomColor = new Color(r, g, b);
+			elements.add(new Individual(rand.nextInt(30), rand.nextInt(width), rand.nextInt(height), randomColor));
 		}
 		
 		return new OutputImage(width, height, numOfElements, elements);
@@ -245,23 +244,22 @@ public class Algorithm
 		generation++;
 		for (int i = 0; i < eliteSize; i++)
 		{
-			double currentBest = compareImage(outputs.get(i).convertToImage());
+			double currentBest = compareImage(outputs.get(0).convertToImage());
 			int currentBestIndex = 0;
-			for (int j = 1; j < populationSize - i; j++)
+			for (int j = 1; j < outputs.size(); j++)
 			{
 				if (currentBest < compareImage(outputs.get(j).convertToImage()))
 				{
 					currentBest = compareImage(outputs.get(j).convertToImage());
 					currentBestIndex = j;
-
 				}
 			}
 			// add to elite
 			elites.add(outputs.get(currentBestIndex));
-			outputs.add(currentBestIndex, outputs.get(populationSize - i - 1));
+			outputs.remove(currentBestIndex);
 		}
 
-		for (int i = 0; i < elites.size() - 1; i++)
+		for (int i = 0; i < elites.size(); i++)
 		{
 			if (compareImage(elites.get(nowBestIndex).convertToImage()) < compareImage(elites
 					.get(i).convertToImage()))
