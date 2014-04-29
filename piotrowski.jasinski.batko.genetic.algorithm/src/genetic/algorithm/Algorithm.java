@@ -17,19 +17,17 @@ import java.util.Random;
 public class Algorithm
 {
 	private int populationSize, eliteSize, numOfElements;
-	private double mutationProbability, mutationSize;
+	private double mutationProbability;
 	private OriginalImage originalImage;
 	LinkedList<OutputImage> outputs = new LinkedList<OutputImage>();
 
 	public Algorithm(int populationSize, int eliteSize, int numOfElements,
-			double mutationProbability, double mutationSize,
-			OriginalImage originalImage)
+			double mutationProbability, OriginalImage originalImage)
 	{
 		this.populationSize = populationSize;
 		this.eliteSize = eliteSize;
 		this.numOfElements = numOfElements;
 		this.mutationProbability = mutationProbability;
-		this.mutationSize = mutationSize;
 		this.originalImage = originalImage;
 
 		// Here create first random population
@@ -166,19 +164,19 @@ public class Algorithm
 			int _green = pat.getColor().getGreen();
 			int _blue = pat.getColor().getBlue();
 
-			mutationSize = Math.random();
+			double mutationSize = Math.random();
 			double noChangesProbability = 1.0 - mutationProbability;
 			double parameterMutationProbability = mutationProbability / 3.0;
 
 			if (mutationSize < (noChangesProbability + parameterMutationProbability))
 			{
-				_positionX += gaussRandom() * width;
+				_positionX += gaussRandom(mutationSize) * width;
 				if (_positionX > width)
 					_positionX = width;
 				else if (_positionX < 0)
 					_positionX = 0;
 
-				_positionY += gaussRandom() * height;
+				_positionY += gaussRandom(mutationSize) * height;
 				if (_positionY > height)
 					_positionY = height;
 				else if (_positionY < 0)
@@ -186,26 +184,26 @@ public class Algorithm
 			} else if (mutationSize < noChangesProbability + 2.0
 					* parameterMutationProbability)
 			{
-				_radius += gaussRandom() * ((width + height) / 4.0);
+				_radius += gaussRandom(mutationSize) * ((width + height) / 4.0);
 				if (_radius > ((width + height) / 2.0))
 					_radius = (int) ((width + height) / 2.0);
 				else if (_radius < 0)
 					_radius = 0;
 			} else
 			{
-				_red += gaussRandom() * 255;
+				_red += gaussRandom(mutationSize) * 255;
 				if (_red > 255)
 					_red = 255;
 				else if (_red < 0)
 					_red = 0;
 
-				_green += gaussRandom() * 255;
+				_green += gaussRandom(mutationSize) * 255;
 				if (_green > 255)
 					_green = 255;
 				else if (_green < 0)
 					_green = 0;
 
-				_blue += gaussRandom() * 255;
+				_blue += gaussRandom(mutationSize) * 255;
 				if (_blue > 255)
 					_blue = 255;
 				else if (_blue < 0)
@@ -222,7 +220,7 @@ public class Algorithm
 
 	}
 
-	private double gaussRandom()
+	private double gaussRandom(double mutationSize)
 	{
 		double x = Math.random();
 		double y = Math.random();

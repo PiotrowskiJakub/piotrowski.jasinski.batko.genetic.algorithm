@@ -28,10 +28,11 @@ public class Gui extends JFrame
 	private static final long serialVersionUID = 113639547652102992L;
 
 	private JPanel mainPanel;
-	private JLabel label1, label2, label3, label4, label5, label6,
-			lab_pokolenie, lab_numpok, lab_dopasowanie, lab_numdop;
+	private JLabel lab_image, lab_populationSize, lab_eliteSize,
+			lab_numOfElements, lab_mutationProbability, lab_generation,
+			lab_numberOfGeneration, lab_fitness, lab_numberOfFitness;
 	private JTextField tex_imagePath, tex_populationSize, tex_eliteSize,
-			tex_numOfElements, tex_mutationProbability, tex_mutationSize;
+			tex_numOfElements, tex_mutationProbability;
 	private JButton load, start, stop;
 	private OriginalImage originalImage;
 	private OutputImage outputImage;
@@ -52,14 +53,15 @@ public class Gui extends JFrame
 		GridBagConstraints c = new GridBagConstraints();
 
 		// 1 row
-		label1 = new JLabel("Image: ");
-		label1.setPreferredSize(new Dimension(200, 50));
+		lab_image = new JLabel("Image: ");
+		lab_image.setPreferredSize(new Dimension(200, 50));
 		tex_imagePath = new JTextField(10);
+		tex_imagePath.setEditable(false);
 		load = new JButton("Load image");
 		load.addActionListener(new LoadListener());
 		c.gridx = 0;
 		c.gridy = 0;
-		mainPanel.add(label1, c);
+		mainPanel.add(lab_image, c);
 		c.gridx = 1;
 		c.gridy = 0;
 		mainPanel.add(tex_imagePath, c);
@@ -68,103 +70,93 @@ public class Gui extends JFrame
 		mainPanel.add(load, c);
 
 		// 2 row
-		label2 = new JLabel("Size of population: ");
-		label2.setPreferredSize(new Dimension(200, 50));
+		lab_populationSize = new JLabel("Size of population: ");
+		lab_populationSize.setPreferredSize(new Dimension(200, 50));
 		tex_populationSize = new JTextField("50", 10);
-		// text2.setPreferredSize(new Dimension(50, 20));
 		c.gridx = 0;
 		c.gridy = 2;
-		mainPanel.add(label2, c);
+		mainPanel.add(lab_populationSize, c);
 		c.gridx = 1;
 		c.gridy = 2;
 		mainPanel.add(tex_populationSize, c);
 
 		// 3 row
-		label3 = new JLabel("Size of elite: ");
-		label3.setPreferredSize(new Dimension(200, 50));
-		tex_eliteSize = new JTextField("10", 10);
+		lab_eliteSize = new JLabel("Size of elite: ");
+		lab_eliteSize.setPreferredSize(new Dimension(200, 50));
+		tex_eliteSize = new JTextField(Integer.toString((Integer
+				.parseInt(tex_populationSize.getText()) / 2)), 10);
+		tex_eliteSize.setEditable(false);
 		c.gridx = 0;
 		c.gridy = 3;
-		mainPanel.add(label3, c);
+		mainPanel.add(lab_eliteSize, c);
 		c.gridx = 1;
 		c.gridy = 3;
 		mainPanel.add(tex_eliteSize, c);
 
 		// 4 row
-		label4 = new JLabel("Number of elements: ");
-		label4.setPreferredSize(new Dimension(200, 50));
+		lab_numOfElements = new JLabel("Number of elements: ");
+		lab_numOfElements.setPreferredSize(new Dimension(200, 50));
 		tex_numOfElements = new JTextField("200", 10);
 		c.gridx = 0;
 		c.gridy = 4;
-		mainPanel.add(label4, c);
+		mainPanel.add(lab_numOfElements, c);
 		c.gridx = 1;
 		c.gridy = 4;
 		mainPanel.add(tex_numOfElements, c);
 
 		// 5 row
-		label5 = new JLabel("The probability of mutation: ");
-		label5.setPreferredSize(new Dimension(200, 50));
-		tex_mutationProbability = new JTextField("0.1", 10);
+		lab_mutationProbability = new JLabel("The probability of mutation: ");
+		lab_mutationProbability.setPreferredSize(new Dimension(200, 50));
+		tex_mutationProbability = new JTextField("0.01", 10);
 		c.gridx = 0;
 		c.gridy = 5;
-		mainPanel.add(label5, c);
+		mainPanel.add(lab_mutationProbability, c);
 		c.gridx = 1;
 		c.gridy = 5;
 		mainPanel.add(tex_mutationProbability, c);
 
 		// 6 row
-		label6 = new JLabel("Size of mutations (1-100): ");
-		label6.setPreferredSize(new Dimension(200, 50));
-		tex_mutationSize = new JTextField("10.0", 10);
-		c.gridx = 0;
-		c.gridy = 6;
-		mainPanel.add(label6, c);
-		c.gridx = 1;
-		c.gridy = 6;
-		mainPanel.add(tex_mutationSize, c);
-
-		// 7 row
 		start = new JButton("Start");
 		start.addActionListener(new StartListener());
 		stop = new JButton("Stop");
 		c.gridx = 0;
-		c.gridy = 7;
+		c.gridy = 6;
 		mainPanel.add(start, c);
 		c.gridx = 1;
-		c.gridy = 7;
+		c.gridy = 6;
 		mainPanel.add(stop, c);
 
-		// 8 row
+		// 7 row
 		originalImage = new OriginalImage();
 		outputImage = new OutputImage();
 		c.gridx = 0;
-		c.gridy = 8;
+		c.gridy = 7;
 		mainPanel.add(originalImage, c);
 		c.gridx = 1;
-		c.gridy = 8;
+		c.gridy = 7;
 		mainPanel.add(outputImage, c);
 
-		// 9 row
-		lab_pokolenie = new JLabel("Generation: ");
-		lab_pokolenie.setPreferredSize(new Dimension(200, 50));
-		lab_numpok = new JLabel("0");
+		// 8 row
+		lab_generation = new JLabel("Generation: ");
+		lab_generation.setPreferredSize(new Dimension(200, 50));
+		lab_numberOfGeneration = new JLabel("0");
 		c.gridx = 0;
-		c.gridy = 9;
-		mainPanel.add(lab_pokolenie, c);
+		c.gridy = 8;
+		mainPanel.add(lab_generation, c);
 		c.gridx = 1;
-		c.gridy = 9;
-		mainPanel.add(lab_numpok, c);
+		c.gridy = 8;
+		mainPanel.add(lab_numberOfGeneration, c);
 
-		// 10 row
-		lab_dopasowanie = new JLabel("Fitness: ");
-		lab_dopasowanie.setPreferredSize(new Dimension(200, 50));
-		lab_numdop = new JLabel("0 %");
+		// 9 row
+		lab_fitness = new JLabel("Fitness: ");
+		lab_fitness.setPreferredSize(new Dimension(200, 50));
+		lab_numberOfFitness = new JLabel("0 %");
 		c.gridx = 0;
-		c.gridy = 10;
-		mainPanel.add(lab_dopasowanie, c);
+		c.gridy = 9;
+		mainPanel.add(lab_fitness, c);
 		c.gridx = 1;
-		c.gridy = 10;
-		mainPanel.add(lab_numdop, c);
+		c.gridy = 9;
+		mainPanel.add(lab_numberOfFitness, c);
 
 		this.getContentPane().add(mainPanel);
 		this.pack();
@@ -184,8 +176,23 @@ public class Gui extends JFrame
 				JOptionPane.showMessageDialog(Gui.this,
 						"Please choose the image.", "No image",
 						JOptionPane.ERROR_MESSAGE);
+			else if(Integer.parseInt(tex_populationSize.getText()) < 10)
+				JOptionPane.showMessageDialog(Gui.this,
+							"Population size is too low.", "Wrong population size",
+							JOptionPane.ERROR_MESSAGE);
+			else if(Integer.parseInt(tex_numOfElements.getText()) < 50)
+				JOptionPane.showMessageDialog(Gui.this,
+						"Number of elements is too low.", "Incorrect number of elements",
+						JOptionPane.ERROR_MESSAGE);
+			else if(Double.parseDouble(tex_mutationProbability.getText()) > 0.1)
+				JOptionPane.showMessageDialog(Gui.this,
+						"Mutation probability is too high.", "Incorrect probability of mutation",
+						JOptionPane.ERROR_MESSAGE);
 			else
 			{
+				tex_eliteSize.setText(Integer.toString((Integer
+						.parseInt(tex_populationSize.getText()) / 2)));
+				
 				originalImage.drawImage(imagePath);
 				originalImage.setPreferredSize(new Dimension(originalImage
 						.getWidth(), originalImage.getHeight()));
@@ -194,9 +201,8 @@ public class Gui extends JFrame
 						.getText()), Integer.parseInt(tex_eliteSize.getText()),
 						Integer.parseInt(tex_numOfElements.getText()),
 						Double.parseDouble(tex_mutationProbability.getText()),
-						Double.parseDouble(tex_mutationSize.getText()),
 						originalImage);
-				
+
 				outputImage.setNumOfElements(Integer.parseInt(tex_numOfElements
 						.getText()));
 				outputImage.setWidth(originalImage.getWidth());
@@ -204,17 +210,17 @@ public class Gui extends JFrame
 				outputImage.setElements(algorithm.randomImage().getElements());
 				outputImage.setPreferredSize(new Dimension(originalImage
 						.getWidth(), originalImage.getHeight()));
-				
+
 				Gui.this.repaint();
 				Gui.this.pack();
 				Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 				Gui.this.setLocation(dim.width / 2 - Gui.this.getSize().width
 						/ 2, dim.height / 2 - Gui.this.getSize().height / 2);
-				
+
 			}
 		}
 	}
-	
+
 	private class LoadListener implements ActionListener
 	{
 		@Override
