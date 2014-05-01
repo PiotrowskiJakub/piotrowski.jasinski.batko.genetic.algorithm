@@ -1,5 +1,6 @@
 package gui;
 
+import genetic.algorithm.Algorithm;
 import genetic.algorithm.Individual;
 
 import java.awt.Graphics;
@@ -15,12 +16,12 @@ import javax.swing.JPanel;
  * @version 1.0
  * Class to draw output image using genetic algorithm.
  */
-public class OutputImage extends JPanel
+public class OutputImage extends JPanel implements Runnable
 {
 	private static final long serialVersionUID = -6184846121081330233L;
 	private int width, height, numOfElements;
 	private LinkedList<Individual> elements = new LinkedList<Individual>(); // we draw all elements in this list on output image
-	
+	private Algorithm algorithm;
 	/*********************************************************************************************************************************************************** */
 	
 	public void setWidth(int width)
@@ -43,6 +44,10 @@ public class OutputImage extends JPanel
 		this.elements = elements;
 	}
 	
+	public void setAlgorithm(Algorithm algorithm)
+	{
+		this.algorithm = algorithm;
+	}
 	/*********************************************************************************************************************************************************** */
 	
 	public int getWidth()
@@ -107,5 +112,23 @@ public class OutputImage extends JPanel
 	}
 	
 	public OutputImage(){}
+
+	@Override
+	public void run()
+	{
+		for(int i = 0; i < 50; i++)
+		{
+			setElements(algorithm.randomImage().getElements());
+			repaint();
+			try
+			{
+				Thread.sleep(400);
+			} catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+	}
 	
 }

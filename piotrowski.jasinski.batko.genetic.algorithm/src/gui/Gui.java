@@ -217,6 +217,9 @@ public class Gui extends JFrame
 				Gui.this.setLocation(dim.width / 2 - Gui.this.getSize().width
 						/ 2, dim.height / 2 - Gui.this.getSize().height / 2);
 
+				outputImage.setAlgorithm(algorithm);
+				Thread makeEvolution = new Thread(outputImage);
+				makeEvolution.start();
 			}
 		}
 	}
