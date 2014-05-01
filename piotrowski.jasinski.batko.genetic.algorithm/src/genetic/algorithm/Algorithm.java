@@ -31,7 +31,6 @@ public class Algorithm
 		this.originalImage = originalImage;
 
 		// Here create first random population
-
 		for (int i = 0; i < populationSize; i++)
 		{
 			outputs.add(geneticImage());
@@ -75,7 +74,7 @@ public class Algorithm
 
 		d = 0; // d is sum of the differences between all pixels in output and
 				// original image
-		dMax = width * height * Math.sqrt(255 * 255 * 3); // dMax is maximum sum
+		dMax = width * height * Math.sqrt(3); // dMax is maximum sum
 															// of the
 															// differences
 															// between these
@@ -90,24 +89,27 @@ public class Algorithm
 		if (d > dMax)
 			throw new ArithmeticException("d is greater than dMax !!!");
 
-		return d / dMax;
+		return (dMax-d)/dMax;
 	}
 
 	// We're using this method to compare 2 integer pixels by split both to 3
-	// colors: Red, Blue and Green
+	// function has been changed to compare HSV
 	private double compareColor(Color color1, Color color2)
 	{
 		if (color1 == null || color2 == null)
 			throw new NullPointerException("Color1 or Color2 is NULL !!!");
 
-		double dR = color1.getRed() - color2.getRed();
-		double dG = color1.getGreen() - color2.getGreen();
-		double dB = color1.getBlue() - color2.getBlue();
-
-		return Math.sqrt(dR * dR + dG * dG + dB * dB);
+        float[] hsv1 = new float[3];
+        float[] hsv2 = new float[3];
+        Color.RGBtoHSB(color1.getRed(), color1.getGreen(), color1.getBlue(), hsv1);
+        Color.RGBtoHSB(color2.getRed(), color2.getGreen(), color2.getBlue(), hsv2);
+        float dH = (hsv1[0] - hsv2[0]) * (hsv1[0] - hsv2[0]);
+        float dS = (hsv1[1] - hsv2[1]) * (hsv1[1] - hsv2[1]);
+        float dV = (hsv1[2] - hsv2[2]) * (hsv1[2] - hsv2[2]);
+        return Math.sqrt(dH+dS+dV);
 	}
 
-	private OutputImage hybridization(OutputImage mother, OutputImage father)
+	private LinkedList<OutputImage> crossover(OutputImage mother, OutputImage father)
 	{
 		if (mother == null || father == null)
 			throw new NullPointerException("Mother or father is NULL");
@@ -116,36 +118,38 @@ public class Algorithm
 			throw new ArithmeticException(
 					"Dimensions of mother and father are different !!!");
 
-		int width = mother.getWidth(); // Initialization field necessary to
-										// create child image
+        int random;
+		int width = mother.getWidth();
 		int height = mother.getHeight();
-		LinkedList<Individual> elements = new LinkedList<Individual>();
-		int random;
-
-		// Does the numberOfElements is same for all OutputImages ???????
-		// If so, delete these 4 lines below -->
-//		if (mother.getNumOfElements() < father.getNumOfElements())
-//			numOfElements = mother.getNumOfElements();
-//		else
-//			numOfElements = father.getNumOfElements();
-		// --<
+		LinkedList<Individual> child_list1 = new LinkedList<Individual>();
+        LinkedList<Individual> child_list2 = new LinkedList<Individual>();
+        LinkedList<OutputImage> children_image = new LinkedList<OutputImage>();
+        OutputImage child_image1, child_image2;
 
 		for (int i = 0; i < numOfElements; i++)
 		{
 			random = (int) (Math.random() * (101));
 			try
 			{
-				if (random < 50)
-					elements.add(mother.getElements().get(i));
-				else
-					elements.add(father.getElements().get(i));
+				if (random < 50){
+                    child_list1.add(mother.getElements().get(i));
+                    child_list2.add(father.getElements().get(i));
+                }else{
+                    child_list1.add(father.getElements().get(i));
+                    child_list2.add(mother.getElements().get(i));
+                }
+
 			} catch (IndexOutOfBoundsException e)
-			{
+            {
 				System.out.println("Can't refer to element !!!");
 			}
 		}
 
-		return new OutputImage(width, height, numOfElements, elements);
+        child_image1 = new OutputImage(width, height, numOfElements, child_list1);
+        child_image2 = new OutputImage(width, height, numOfElements, child_list2);
+        children_image.add(child_image1);
+        children_image.add(child_image2);
+		return children_image;
 	}
 
 	private OutputImage mutation(OutputImage pattern)
@@ -273,8 +277,8 @@ public class Algorithm
 		{
 			if (mother != father)
 			{
-				outputs.add(mutation(hybridization(elites.get(mother),
-						elites.get(father))));
+				outputs.add(mutation(crossover(elites.get(mother),
+                        elites.get(father)).getFirst()));
 				// geneticImages[i] = reproduct(eliteImages[mother],
 				// eliteImages[father]);
 				i++;
