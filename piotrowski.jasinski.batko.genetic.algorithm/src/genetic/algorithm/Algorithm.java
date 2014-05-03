@@ -56,7 +56,7 @@ public class Algorithm
 		return new OutputImage(width, height, numOfElements, elements);
 	}
 
-	private double compareImage(BufferedImage outputImage)
+	public double compareImage(BufferedImage outputImage)
 	{
 		int width, height;
 		double d, dMax;

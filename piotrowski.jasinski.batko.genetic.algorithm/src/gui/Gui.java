@@ -218,6 +218,8 @@ public class Gui extends JFrame
 						/ 2, dim.height / 2 - Gui.this.getSize().height / 2);
 
 				outputImage.setAlgorithm(algorithm);
+				outputImage.setNumberOfGeneration(lab_numberOfGeneration);
+				outputImage.setNumberOfFitness(lab_numberOfFitness);
 				Thread makeEvolution = new Thread(outputImage);
 				makeEvolution.start();
 			}
