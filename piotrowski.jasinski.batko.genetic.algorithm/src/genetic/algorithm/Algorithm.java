@@ -188,8 +188,7 @@ public class Algorithm
 						_positionY = height;
 					else if (_positionY < 0)
 						_positionY = 0;
-				} else if (mutationSize < noChangesProbability + 2.0
-						* parameterMutationProbability)
+				} else if (mutationSize < noChangesProbability + 2.0 * parameterMutationProbability)
 				{
 					_radius += gaussRandom(mutationSize) * ((width + height) / 4.0);
 					if (_radius > ((width + height) / 2.0))
@@ -250,12 +249,14 @@ public class Algorithm
 		for (int i = 0; i < eliteSize; i++)
 		{
 			double currentBest = compareImage(outputs.get(0).convertToImage());
+			double actualCheck;
 			int currentBestIndex = 0;
 			for (int j = 1; j < outputs.size(); j++)
 			{
-				if (currentBest < compareImage(outputs.get(j).convertToImage()))
+				actualCheck = compareImage(outputs.get(j).convertToImage());
+				if (currentBest < actualCheck)
 				{
-					currentBest = compareImage(outputs.get(j).convertToImage());
+					currentBest = actualCheck;
 					currentBestIndex = j;
 				}
 			}
@@ -264,12 +265,13 @@ public class Algorithm
 			outputs.remove(currentBestIndex);
 		}
 
+		double actualBest = compareImage(elites.get(nowBestIndex).convertToImage());
 		for (int i = 0; i < elites.size(); i++)
 		{
-			if (compareImage(elites.get(nowBestIndex).convertToImage()) < compareImage(elites
-					.get(i).convertToImage()))
+			if (actualBest < compareImage(elites.get(i).convertToImage()))
 			{
 				nowBestIndex = i;
+				actualBest = compareImage(elites.get(i).convertToImage());
 			}
 		}
 
@@ -284,7 +286,6 @@ public class Algorithm
 		{
 			if (mother != father)
 			{
-				//TUTAJ USTAWIC RANDOM MUTACJI I ZROBIC WARUNKI!!!
 				
 				double mutationSize = Math.random();
 				
