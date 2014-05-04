@@ -33,12 +33,17 @@ public class OutputImage extends JPanel implements Runnable
 																			// image
 	private Algorithm algorithm;
 	private JLabel lab_numberOfGeneration, lab_numberOfFitness;
-
+	private double fitness;
 	/*********************************************************************************************************************************************************** */
 
 	public void setWidth(int width)
 	{
 		this.width = width;
+	}
+
+	public void setFitness(double fitness)
+	{
+		this.fitness = fitness;
 	}
 
 	public void setHeight(int height)
@@ -93,6 +98,10 @@ public class OutputImage extends JPanel implements Runnable
 		return elements;
 	}
 
+	public double getFitness()
+	{
+		return fitness;
+	}
 	/*********************************************************************************************************************************************************** */
 
 	/**
@@ -146,22 +155,17 @@ public class OutputImage extends JPanel implements Runnable
 	@Override
 	public void run()
 	{
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 10; i++)
 		{
-			setElements(algorithm.randomImage().getElements());
+			//setElements(algorithm.randomImage().getElements());
+			OutputImage temporaryOutputImage = algorithm.evolution();
+			setElements(temporaryOutputImage.getElements());
 			lab_numberOfGeneration.setText(Integer.toString(i));
-			lab_numberOfFitness.setText((new DecimalFormat("#.##")
-					.format(algorithm.compareImage(this.convertToImage())))
-					.substring(2)
-					+ " %");
+//			lab_numberOfFitness.setText((new DecimalFormat("#.##")
+//					.format(temporaryOutputImage.getFitness()))
+//					.substring(2)
+//					+ " %");
 			repaint();
-			try
-			{
-				Thread.sleep(400);
-			} catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
 		}
 
 	}
