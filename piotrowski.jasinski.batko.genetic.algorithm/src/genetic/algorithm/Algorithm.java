@@ -218,8 +218,7 @@ public class Algorithm
 	
 				}
 	
-				Individual newElements = new Individual(_radius, _positionX,
-						_positionY, new Color(_red, _green, _blue));
+				Individual newElements = new Individual(_radius, _positionX, _positionY, new Color(_red, _green, _blue));
 				_elements.add(newElements);
 			}
 		
