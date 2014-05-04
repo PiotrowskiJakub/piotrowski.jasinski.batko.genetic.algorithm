@@ -286,77 +286,79 @@ public class Algorithm
 		int mother = 0;
 		int father = 0;
 		LinkedList<OutputImage> children_list = new LinkedList<OutputImage>();
-		
-		while (i < populationSize)
-		{
-			if (mother != father)
-			{
-				
-				double mutationSize = Math.random();
-				
-				if(mutationSize >= mutationProbability){
-					children_list = mutation(crossover(elites.get(mother), elites.get(father)));
-				}else{
-					children_list = crossover(elites.get(mother), elites.get(father));
-				}
-				
-				outputs.add(children_list.get(0));
-				outputs.add(children_list.get(1));
-				// geneticImages[i] = reproduct(eliteImages[mother],
-				// eliteImages[father]);
-				i++;
-				if (i >= populationSize)
-					break;
-			}
 
-			father++;
-			if (father >= eliteSize)
-			{
-				mother++;
-				father = 0;
-			}
-			if (mother >= eliteSize)
-			{
-				mother = 0;
-				father = 1;
-			}
-		}
-		
-//		while(i < populationSize){
-//			for(int j = 0; j < eliteSize; j+=2){
+// WERSJA NASZA
+//		while (i < populationSize)
+//		{
+//			if (mother != father)
+//			{
+//				
 //				double mutationSize = Math.random();
-//					
+//				
 //				if(mutationSize >= mutationProbability){
-//					children_list = mutation(crossover(elites.get(j), elites.get(j+1)));
+//					children_list = mutation(crossover(elites.get(mother), elites.get(father)));
 //				}else{
-//					children_list = crossover(elites.get(j), elites.get(j+1));
+//					children_list = crossover(elites.get(mother), elites.get(father));
 //				}
-//						
+//				
 //				outputs.add(children_list.get(0));
 //				outputs.add(children_list.get(1));
+//				// geneticImages[i] = reproduct(eliteImages[mother],
+//				// eliteImages[father]);
 //				i++;
 //				if (i >= populationSize)
 //					break;
 //			}
-//		}
-//		
-//		Random generator = new Random(); 
-//		int randomMember1 = generator.nextInt(eliteSize);
-//		int randomMember2 = generator.nextInt(eliteSize);
-//		
-//		if((randomMember1 != randomMember2) && (randomMember1 != randomMember2 - 1) && (randomMember1 != randomMember2 + 1)){
-//			double mutationSize = Math.random();
-//			
-//			if(mutationSize >= mutationProbability){
-//				children_list = mutation(crossover(elites.get(randomMember1), elites.get(randomMember2)));
-//			}else{
-//				children_list = crossover(elites.get(randomMember1), elites.get(randomMember2));
+//
+//			father++;
+//			if (father >= eliteSize)
+//			{
+//				mother++;
+//				father = 0;
 //			}
-//					
-//			outputs.add(children_list.get(0));
-//			outputs.add(children_list.get(1));
-//			i++;
+//			if (mother >= eliteSize)
+//			{
+//				mother = 0;
+//				father = 1;
+//			}
 //		}
+		
+// WERSJA PROWADZACEGO
+		while(i < populationSize){
+			for(int j = 0; j < eliteSize-1; j+=2){
+				double mutationSize = Math.random();
+					
+				if(mutationSize >= mutationProbability){
+					children_list = mutation(crossover(elites.get(j), elites.get(j+1)));
+				}else{
+					children_list = crossover(elites.get(j), elites.get(j+1));
+				}
+						
+				outputs.add(children_list.get(0));
+				outputs.add(children_list.get(1));
+				i++;
+				if (i >= populationSize)
+					break;
+			}
+		}
+		
+		Random generator = new Random(); 
+		int randomMember1 = generator.nextInt(eliteSize);
+		int randomMember2 = generator.nextInt(eliteSize);
+		
+		if((randomMember1 != randomMember2) && (randomMember1 != randomMember2 - 1) && (randomMember1 != randomMember2 + 1)){
+			double mutationSize = Math.random();
+			
+			if(mutationSize >= mutationProbability){
+				children_list = mutation(crossover(elites.get(randomMember1), elites.get(randomMember2)));
+			}else{
+				children_list = crossover(elites.get(randomMember1), elites.get(randomMember2));
+			}
+					
+			outputs.add(children_list.get(0));
+			outputs.add(children_list.get(1));
+			i++;
+		}
 		
 		
 		return elites.get(nowBestIndex);
