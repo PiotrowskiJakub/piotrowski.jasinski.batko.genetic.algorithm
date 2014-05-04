@@ -152,75 +152,81 @@ public class Algorithm
 		return children_image;
 	}
 
-	private OutputImage mutation(OutputImage pattern)
+	private LinkedList<OutputImage> mutation(LinkedList<OutputImage> pattern_list)
 	{
 
 		LinkedList<Individual> _elements = new LinkedList<Individual>();
-		int width = pattern.getWidth();
-		int height = pattern.getHeight();
+		int width = pattern_list.get(0).getWidth();
+		int height = pattern_list.get(0).getHeight();
 
-		for (Individual pat : pattern.getElements())
-		{
-			int _positionX = pat.getPositionX();
-			int _positionY = pat.getPositionY();
-			int _radius = pat.getRadius();
-			int _red = pat.getColor().getRed();
-			int _green = pat.getColor().getGreen();
-			int _blue = pat.getColor().getBlue();
-
-			double mutationSize = Math.random();
-			double noChangesProbability = 1.0 - mutationProbability;
-			double parameterMutationProbability = mutationProbability / 3.0;
-
-			if (mutationSize < (noChangesProbability + parameterMutationProbability))
+		LinkedList<OutputImage> finalChild = new LinkedList<OutputImage>();
+		
+		for(OutputImage singleImage : pattern_list){
+			for (Individual pat : singleImage.getElements())
 			{
-				_positionX += gaussRandom(mutationSize) * width;
-				if (_positionX > width)
-					_positionX = width;
-				else if (_positionX < 0)
-					_positionX = 0;
-
-				_positionY += gaussRandom(mutationSize) * height;
-				if (_positionY > height)
-					_positionY = height;
-				else if (_positionY < 0)
-					_positionY = 0;
-			} else if (mutationSize < noChangesProbability + 2.0
-					* parameterMutationProbability)
-			{
-				_radius += gaussRandom(mutationSize) * ((width + height) / 4.0);
-				if (_radius > ((width + height) / 2.0))
-					_radius = (int) ((width + height) / 2.0);
-				else if (_radius < 0)
-					_radius = 0;
-			} else
-			{
-				_red += gaussRandom(mutationSize) * 255;
-				if (_red > 255)
-					_red = 255;
-				else if (_red < 0)
-					_red = 0;
-
-				_green += gaussRandom(mutationSize) * 255;
-				if (_green > 255)
-					_green = 255;
-				else if (_green < 0)
-					_green = 0;
-
-				_blue += gaussRandom(mutationSize) * 255;
-				if (_blue > 255)
-					_blue = 255;
-				else if (_blue < 0)
-					_blue = 0;
-
+				int _positionX = pat.getPositionX();
+				int _positionY = pat.getPositionY();
+				int _radius = pat.getRadius();
+				int _red = pat.getColor().getRed();
+				int _green = pat.getColor().getGreen();
+				int _blue = pat.getColor().getBlue();
+	
+				double mutationSize = Math.random();
+				double noChangesProbability = 1.0 - mutationProbability;
+				double parameterMutationProbability = mutationProbability / 3.0;
+	
+				if (mutationSize < (noChangesProbability + parameterMutationProbability))
+				{
+					_positionX += gaussRandom(mutationSize) * width;
+					if (_positionX > width)
+						_positionX = width;
+					else if (_positionX < 0)
+						_positionX = 0;
+	
+					_positionY += gaussRandom(mutationSize) * height;
+					if (_positionY > height)
+						_positionY = height;
+					else if (_positionY < 0)
+						_positionY = 0;
+				} else if (mutationSize < noChangesProbability + 2.0
+						* parameterMutationProbability)
+				{
+					_radius += gaussRandom(mutationSize) * ((width + height) / 4.0);
+					if (_radius > ((width + height) / 2.0))
+						_radius = (int) ((width + height) / 2.0);
+					else if (_radius < 0)
+						_radius = 0;
+				} else
+				{
+					_red += gaussRandom(mutationSize) * 255;
+					if (_red > 255)
+						_red = 255;
+					else if (_red < 0)
+						_red = 0;
+	
+					_green += gaussRandom(mutationSize) * 255;
+					if (_green > 255)
+						_green = 255;
+					else if (_green < 0)
+						_green = 0;
+	
+					_blue += gaussRandom(mutationSize) * 255;
+					if (_blue > 255)
+						_blue = 255;
+					else if (_blue < 0)
+						_blue = 0;
+	
+				}
+	
+				Individual newElements = new Individual(_radius, _positionX,
+						_positionY, new Color(_red, _green, _blue));
+				_elements.add(newElements);
 			}
-
-			Individual newElements = new Individual(_radius, _positionX,
-					_positionY, new Color(_red, _green, _blue));
-			_elements.add(newElements);
+		
+			finalChild.add(new OutputImage(width, height, singleImage.getNumOfElements(), _elements));
 		}
 
-		return new OutputImage(width, height, pattern.getNumOfElements(), _elements);
+		return finalChild;
 
 	}
 
@@ -273,12 +279,24 @@ public class Algorithm
 		int i = 0;
 		int mother = 0;
 		int father = 0;
+		LinkedList<OutputImage> children_list = new LinkedList<OutputImage>();
+		
 		while (i < populationSize)
 		{
 			if (mother != father)
 			{
-				outputs.add(mutation(crossover(elites.get(mother),
-                        elites.get(father)).getFirst()));
+				//TUTAJ USTAWIC RANDOM MUTACJI I ZROBIC WARUNKI!!!
+				
+				double mutationSize = Math.random();
+				
+				if(mutationSize >= mutationProbability){
+					children_list = mutation(crossover(elites.get(mother), elites.get(father)));
+				}else{
+					children_list = crossover(elites.get(mother), elites.get(father));
+				}
+				
+				outputs.add(children_list.get(0));
+				outputs.add(children_list.get(1));
 				// geneticImages[i] = reproduct(eliteImages[mother],
 				// eliteImages[father]);
 				i++;
