@@ -114,7 +114,7 @@ public class OutputImage extends JPanel implements Runnable
 		BufferedImage bi = new BufferedImage(width, height,
 				BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = bi.createGraphics();
-		this.paint(g);
+		this.print(g);
 
 		return bi;
 	}
