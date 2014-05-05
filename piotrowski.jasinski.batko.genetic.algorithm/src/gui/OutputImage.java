@@ -34,6 +34,7 @@ public class OutputImage extends JPanel implements Runnable
 	private Algorithm algorithm;
 	private JLabel lab_numberOfGeneration, lab_numberOfFitness;
 	private double fitness;
+	private boolean evolutionCondition;
 	/*********************************************************************************************************************************************************** */
 
 	public void setWidth(int width)
@@ -74,6 +75,11 @@ public class OutputImage extends JPanel implements Runnable
 	public void setNumberOfFitness(JLabel lab_numberOfFitness)
 	{
 		this.lab_numberOfFitness = lab_numberOfFitness;
+	}
+
+	public void setEvolutionCondition(boolean evolutionCondition)
+	{
+		this.evolutionCondition = evolutionCondition;
 	}
 
 	/*********************************************************************************************************************************************************** */
@@ -155,16 +161,17 @@ public class OutputImage extends JPanel implements Runnable
 	@Override
 	public void run()
 	{
-		for (int i = 0; i < 10; i++)
+		int i = 1;
+		while(evolutionCondition)
 		{
-			//setElements(algorithm.randomImage().getElements());
 			OutputImage temporaryOutputImage = algorithm.evolution();
 			setElements(temporaryOutputImage.getElements());
 			lab_numberOfGeneration.setText(Integer.toString(i));
-//			lab_numberOfFitness.setText((new DecimalFormat("#.##")
-//					.format(temporaryOutputImage.getFitness()))
-//					.substring(2)
-//					+ " %");
+			lab_numberOfFitness.setText((new DecimalFormat("#.##")
+					.format(temporaryOutputImage.getFitness()))
+					.substring(2)
+					+ " %");
+			i++;
 			repaint();
 		}
 

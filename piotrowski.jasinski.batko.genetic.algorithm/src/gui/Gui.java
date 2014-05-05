@@ -119,6 +119,7 @@ public class Gui extends JFrame
 		start = new JButton("Start");
 		start.addActionListener(new StartListener());
 		stop = new JButton("Stop");
+		stop.addActionListener(new StopListener());
 		c.gridx = 0;
 		c.gridy = 6;
 		mainPanel.add(start, c);
@@ -217,6 +218,7 @@ public class Gui extends JFrame
 				Gui.this.setLocation(dim.width / 2 - Gui.this.getSize().width
 						/ 2, dim.height / 2 - Gui.this.getSize().height / 2);
 
+				outputImage.setEvolutionCondition(true);
 				outputImage.setAlgorithm(algorithm);
 				outputImage.setNumberOfGeneration(lab_numberOfGeneration);
 				outputImage.setNumberOfFitness(lab_numberOfFitness);
@@ -226,6 +228,17 @@ public class Gui extends JFrame
 		}
 	}
 
+	private class StopListener implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			outputImage.setEvolutionCondition(false);
+		}
+		
+	}
+	
 	private class LoadListener implements ActionListener
 	{
 		@Override
