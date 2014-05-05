@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 public class OutputImage extends JPanel implements Runnable
 {
 	private static final long serialVersionUID = -6184846121081330233L;
-	private int width, height, numOfElements;
+	private int width, height, numOfElements, counter;
 	private LinkedList<Individual> elements = new LinkedList<Individual>(); // we
 																			// draw
 																			// all
@@ -80,6 +80,11 @@ public class OutputImage extends JPanel implements Runnable
 	public void setEvolutionCondition(boolean evolutionCondition)
 	{
 		this.evolutionCondition = evolutionCondition;
+	}
+
+	public void setCounter(int counter)
+	{
+		this.counter = counter;
 	}
 
 	/*********************************************************************************************************************************************************** */
@@ -161,17 +166,16 @@ public class OutputImage extends JPanel implements Runnable
 	@Override
 	public void run()
 	{
-		int i = 1;
 		while(evolutionCondition)
 		{
 			OutputImage temporaryOutputImage = algorithm.evolution();
 			setElements(temporaryOutputImage.getElements());
-			lab_numberOfGeneration.setText(Integer.toString(i));
+			lab_numberOfGeneration.setText(Integer.toString(counter));
 			lab_numberOfFitness.setText((new DecimalFormat("#.##")
 					.format(temporaryOutputImage.getFitness()))
 					.substring(2)
 					+ " %");
-			i++;
+			counter++;
 			repaint();
 		}
 

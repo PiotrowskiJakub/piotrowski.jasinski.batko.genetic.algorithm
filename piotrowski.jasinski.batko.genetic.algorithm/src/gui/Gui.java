@@ -38,7 +38,7 @@ public class Gui extends JFrame
 	private OutputImage outputImage;
 	private File imagePath;
 	private Algorithm algorithm;
-
+	
 	public static void main(String[] args)
 	{
 		new Gui();
@@ -191,37 +191,42 @@ public class Gui extends JFrame
 						JOptionPane.ERROR_MESSAGE);
 			else
 			{
-				tex_eliteSize.setText(Integer.toString((Integer
-						.parseInt(tex_populationSize.getText()) / 2)));
-				
-				originalImage.drawImage(imagePath);
-				originalImage.setPreferredSize(new Dimension(originalImage
-						.getWidth(), originalImage.getHeight()));
+				if(algorithm == null)
+				{
+					tex_eliteSize.setText(Integer.toString((Integer
+							.parseInt(tex_populationSize.getText()) / 2)));
+					
+					originalImage.drawImage(imagePath);
+					originalImage.setPreferredSize(new Dimension(originalImage
+							.getWidth(), originalImage.getHeight()));
 
-				algorithm = new Algorithm(Integer.parseInt(tex_populationSize
-						.getText()), Integer.parseInt(tex_eliteSize.getText()),
-						Integer.parseInt(tex_numOfElements.getText()),
-						Double.parseDouble(tex_mutationProbability.getText()),
-						originalImage);
+					algorithm = new Algorithm(Integer.parseInt(tex_populationSize
+							.getText()), Integer.parseInt(tex_eliteSize.getText()),
+							Integer.parseInt(tex_numOfElements.getText()),
+							Double.parseDouble(tex_mutationProbability.getText()),
+							originalImage);
 
-				outputImage.setNumOfElements(Integer.parseInt(tex_numOfElements
-						.getText()));
-				outputImage.setWidth(originalImage.getWidth());
-				outputImage.setHeight(originalImage.getHeight());
-				outputImage.setElements(algorithm.randomImage().getElements());
-				outputImage.setPreferredSize(new Dimension(originalImage
-						.getWidth(), originalImage.getHeight()));
+					outputImage.setNumOfElements(Integer.parseInt(tex_numOfElements
+							.getText()));
+					outputImage.setWidth(originalImage.getWidth());
+					outputImage.setHeight(originalImage.getHeight());
+					outputImage.setElements(algorithm.randomImage().getElements());
+					outputImage.setPreferredSize(new Dimension(originalImage
+							.getWidth(), originalImage.getHeight()));
 
-				Gui.this.repaint();
-				Gui.this.pack();
-				Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-				Gui.this.setLocation(dim.width / 2 - Gui.this.getSize().width
-						/ 2, dim.height / 2 - Gui.this.getSize().height / 2);
+					Gui.this.repaint();
+					Gui.this.pack();
+					Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+					Gui.this.setLocation(dim.width / 2 - Gui.this.getSize().width
+							/ 2, dim.height / 2 - Gui.this.getSize().height / 2);
+					
+					outputImage.setAlgorithm(algorithm);
+					outputImage.setNumberOfGeneration(lab_numberOfGeneration);
+					outputImage.setNumberOfFitness(lab_numberOfFitness);
+					outputImage.setCounter(1);
+				}
 
 				outputImage.setEvolutionCondition(true);
-				outputImage.setAlgorithm(algorithm);
-				outputImage.setNumberOfGeneration(lab_numberOfGeneration);
-				outputImage.setNumberOfFitness(lab_numberOfFitness);
 				Thread makeEvolution = new Thread(outputImage);
 				makeEvolution.start();
 			}
@@ -234,7 +239,11 @@ public class Gui extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			outputImage.setEvolutionCondition(false);
+			if(algorithm != null)
+			{
+				outputImage.setEvolutionCondition(false);
+				start.setText("Resume");
+			}
 		}
 		
 	}
@@ -244,6 +253,8 @@ public class Gui extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			algorithm = null;
+			start.setText("Start");
 			JFileChooser chooser = new JFileChooser("img/");
 			chooser.showOpenDialog(Gui.this);
 			imagePath = chooser.getSelectedFile();
