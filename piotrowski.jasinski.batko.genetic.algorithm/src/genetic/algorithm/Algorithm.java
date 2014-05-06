@@ -74,11 +74,14 @@ public class Algorithm
 
 		d = 0; // d is sum of the differences between all pixels in output and
 				// original image
-		dMax = width * height * Math.sqrt(3); // dMax is maximum sum
+        // dla HSV        dMax = width * height * Math.sqrt(3); // dMax is maximum sum
 															// of the
 															// differences
 															// between these
 															// images
+
+        //dla RGB
+        dMax = width * height * Math.sqrt(3 * 255 * 255);
 
 		for (int x = 0; x < width; x++)
 			// Compare every pixel
@@ -99,6 +102,9 @@ public class Algorithm
 		if (color1 == null || color2 == null)
 			throw new NullPointerException("Color1 or Color2 is NULL !!!");
 
+        /*
+            WERSJA HSV
+
         float[] hsv1 = new float[3];
         float[] hsv2 = new float[3];
         Color.RGBtoHSB(color1.getRed(), color1.getGreen(), color1.getBlue(), hsv1);
@@ -107,7 +113,17 @@ public class Algorithm
         float dS = (hsv1[1] - hsv2[1]) * (hsv1[1] - hsv2[1]);
         float dV = (hsv1[2] - hsv2[2]) * (hsv1[2] - hsv2[2]);
         return Math.sqrt(dH+dS+dV);
-	}
+        */
+        /*
+            Wersja RGB
+         */
+
+        int dR,dG,dB;
+        dR = color1.getRed() - color2.getRed();
+        dG = color1.getGreen() - color2.getGreen();
+        dB = color1.getBlue() - color2.getBlue();
+        return Math.sqrt(dR*dR + dG*dG + dB*dB);
+    }
 
 	private LinkedList<OutputImage> crossover(OutputImage mother, OutputImage father)
 	{
