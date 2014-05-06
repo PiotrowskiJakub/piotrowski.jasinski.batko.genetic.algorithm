@@ -74,14 +74,16 @@ public class Algorithm
 
 		d = 0; // d is sum of the differences between all pixels in output and
 				// original image
-        // dla HSV        dMax = width * height * Math.sqrt(3); // dMax is maximum sum
+
+
+        //dla RGB
+        //dMax = width * height * Math.sqrt(3 * 255 * 255);
+        // dla HSV
+        dMax = width * height * Math.sqrt(3); // dMax is maximum sum
 															// of the
 															// differences
 															// between these
 															// images
-
-        //dla RGB
-        dMax = width * height * Math.sqrt(3 * 255 * 255);
 
 		for (int x = 0; x < width; x++)
 			// Compare every pixel
@@ -103,7 +105,7 @@ public class Algorithm
 			throw new NullPointerException("Color1 or Color2 is NULL !!!");
 
         /*
-            WERSJA HSV
+            WERSJA HSV*/
 
         float[] hsv1 = new float[3];
         float[] hsv2 = new float[3];
@@ -113,16 +115,16 @@ public class Algorithm
         float dS = (hsv1[1] - hsv2[1]) * (hsv1[1] - hsv2[1]);
         float dV = (hsv1[2] - hsv2[2]) * (hsv1[2] - hsv2[2]);
         return Math.sqrt(dH+dS+dV);
-        */
+
         /*
             Wersja RGB
          */
 
-        int dR,dG,dB;
+        /*int dR,dG,dB;
         dR = color1.getRed() - color2.getRed();
         dG = color1.getGreen() - color2.getGreen();
         dB = color1.getBlue() - color2.getBlue();
-        return Math.sqrt(dR*dR + dG*dG + dB*dB);
+        return Math.sqrt(dR*dR + dG*dG + dB*dB);*/
     }
 
 	private LinkedList<OutputImage> crossover(OutputImage mother, OutputImage father)
@@ -344,7 +346,7 @@ public class Algorithm
 			for(int j = 0; j < eliteSize-1; j+=2){
 				double mutationSize = Math.random();
 					
-				if(mutationSize >= mutationProbability){
+				if(mutationSize <= mutationProbability){
 					children_list = mutation(crossover(elites.get(j), elites.get(j+1)));
 				}else{
 					children_list = crossover(elites.get(j), elites.get(j+1));
