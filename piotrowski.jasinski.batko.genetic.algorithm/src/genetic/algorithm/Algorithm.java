@@ -257,7 +257,7 @@ public class Algorithm
 	public OutputImage evolution()
 	{
 		LinkedList<OutputImage> elites = new LinkedList<OutputImage>();
-		int nowBestIndex = 0; // tutaj najlepszy obraz danej populacji
+		int nowBestIndex = 0; // index of the best image in this generation
 
 		for (int i = 0; i < outputs.size(); i++)
 		{
@@ -339,51 +339,50 @@ public class Algorithm
 		// }
 
 		// WERSJA PROWADZACEGO
-		while (i < populationSize)
-		{
-			for (int j = 0; j < eliteSize - 1; j += 2)
-			{
-				double mutationSize = Math.random();
 
-				if (mutationSize <= mutationProbability)
-				{
-					children_list = mutation(crossover(elites.get(j),elites.get(j + 1)));
-				} else
-				{
-					children_list = crossover(elites.get(j), elites.get(j + 1));
-				}
-
-				outputs.add(children_list.get(0));
-				outputs.add(children_list.get(1));
-				i++;
-				if (i >= populationSize)
-					break;
-			}
-		}
-
-		Random generator = new Random();
-		int randomMember1 = generator.nextInt(eliteSize);
-		int randomMember2 = generator.nextInt(eliteSize);
-
-		if ((randomMember1 != randomMember2)
-				&& (randomMember1 != randomMember2 - 1)
-				&& (randomMember1 != randomMember2 + 1))
+		for (int j = 0; j < eliteSize - 1; j += 2)
 		{
 			double mutationSize = Math.random();
 
-			if (mutationSize >= mutationProbability)
+			if (mutationSize <= mutationProbability)
 			{
-				children_list = mutation(crossover(elites.get(randomMember1),
-						elites.get(randomMember2)));
-			} else
+				children_list = mutation(crossover(elites.get(j),elites.get(j + 1)));
+			} 
+			else
 			{
-				children_list = crossover(elites.get(randomMember1),
-						elites.get(randomMember2));
+				children_list = crossover(elites.get(j), elites.get(j + 1));
 			}
 
 			outputs.add(children_list.get(0));
 			outputs.add(children_list.get(1));
-			i++;
+			i += 2;
+		}
+
+		SecureRandom generator = new SecureRandom();
+		while (i < populationSize)
+		{
+			int randomMember1 = generator.nextInt(eliteSize);
+			int randomMember2 = generator.nextInt(eliteSize);
+	
+			if ((randomMember1 != randomMember2)
+					&& (randomMember1 != randomMember2 - 1)
+					&& (randomMember1 != randomMember2 + 1))
+			{
+				double mutationSize = Math.random();
+	
+				if (mutationSize <= mutationProbability)
+				{
+					children_list = mutation(crossover(elites.get(randomMember1), elites.get(randomMember2)));
+				} 
+				else
+				{
+					children_list = crossover(elites.get(randomMember1), elites.get(randomMember2));
+				}
+	
+				outputs.add(children_list.get(0));
+				outputs.add(children_list.get(1));
+				i += 2;
+			}
 		}
 
 		return elites.get(nowBestIndex);
