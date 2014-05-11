@@ -161,15 +161,16 @@ public class OutputImage extends JPanel implements Runnable
 	@Override
 	public void run()
 	{
+		DecimalFormat decimalFormat = new DecimalFormat("#.##");
 		while(evolutionCondition)
 		{
 			OutputImage temporaryOutputImage = algorithm.evolution();
 			setElements(temporaryOutputImage.getElements());
 			lab_numberOfGeneration.setText(Integer.toString(counter));
-			lab_numberOfFitness.setText((new DecimalFormat("#.##")
-					.format(temporaryOutputImage.getFitness()))
-					.substring(2)
-					+ " %");
+			String fitnessString = decimalFormat.format(temporaryOutputImage.getFitness());
+			if(fitnessString.length() == 3)
+				fitnessString = fitnessString + "0";
+			lab_numberOfFitness.setText(fitnessString.substring(2) + " %");
 			counter++;
 			repaint();
 		}
