@@ -5,21 +5,22 @@ import gui.OutputImage;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.security.SecureRandom;
 import java.util.LinkedList;
 import java.util.Random;
 
 /**
  * 
- * @author Jakub Piotrowski
- * @version 1.0 This class is our genetic algorithm using to generate image
- *          similar to original image
+ * @author Jakub Piotrowski, Przemysław Jasiński, Sebastian Batko
+ * @version 1.0 
+ * This class is our genetic algorithm using to generate image similar to original image
  */
 public class Algorithm
 {
 	private int populationSize, eliteSize, numOfElements;
 	private double mutationProbability;
 	private OriginalImage originalImage;
-	LinkedList<OutputImage> outputs = new LinkedList<OutputImage>();
+	LinkedList<OutputImage> outputs = new LinkedList<OutputImage>();	// in the list we have all OutputImages (one population)
 
 	public Algorithm(int populationSize, int eliteSize, int numOfElements,
 			double mutationProbability, OriginalImage originalImage)
@@ -30,7 +31,7 @@ public class Algorithm
 		this.mutationProbability = mutationProbability;
 		this.originalImage = originalImage;
 
-		// Here create first random population
+		// Here we create first random population
 		for (int i = 0; i < populationSize; i++)
 		{
 			outputs.add(geneticImage());
@@ -38,10 +39,14 @@ public class Algorithm
 
 	}
 
+	/**
+	 * A convenience method used in the constructor.
+	 * @return new random generated OutputImage
+	 */
 	private OutputImage geneticImage()
 	{
 		LinkedList<Individual> elements = new LinkedList<Individual>();
-		Random rand = new Random();
+		SecureRandom rand = new SecureRandom();
 		int width = originalImage.getWidth();
 		int height = originalImage.getHeight();
 		for (int i = 0; i < numOfElements; i++)
@@ -58,6 +63,11 @@ public class Algorithm
 		return new OutputImage(width, height, numOfElements, elements);
 	}
 
+	/**
+	 * Method used to compare image with the orginalImage
+	 * @param outputImage to compare
+	 * @return	Fitness as double value.
+	 */
 	public double compareImage(BufferedImage outputImage)
 	{
 		int width, height;
@@ -69,10 +79,8 @@ public class Algorithm
 		width = outputImage.getWidth();
 		height = outputImage.getHeight();
 
-		if (width != originalImage.getWidth()
-				|| height != originalImage.getHeight())
-			throw new IllegalArgumentException(
-					"Dimensions of original and output image are different !!!");
+		if (width != originalImage.getWidth() || height != originalImage.getHeight())
+			throw new IllegalArgumentException("Dimensions of original and output image are different !!!");
 
 		d = 0; // d is sum of the differences between all pixels in output and original image
 
@@ -113,6 +121,7 @@ public class Algorithm
 		if (mother.getWidth() != father.getWidth() || mother.getHeight() != father.getHeight())
 			throw new ArithmeticException("Dimensions of mother and father are different !!!");
 
+		SecureRandom rand = new SecureRandom();
 		int random;
 		int width = mother.getWidth();
 		int height = mother.getHeight();
@@ -123,7 +132,7 @@ public class Algorithm
 
 		for (int i = 0; i < numOfElements; i++)
 		{
-			random = (int) (Math.random() * (101));
+			random = rand.nextInt(101);
 			try
 			{
 				if (random < 50)
@@ -136,18 +145,18 @@ public class Algorithm
 					child_list2.add(mother.getElements().get(i));
 				}
 
-			} catch (IndexOutOfBoundsException e)
+			} 
+			catch (IndexOutOfBoundsException e)
 			{
 				System.out.println("Can't refer to element !!!");
 			}
 		}
 
-		child_image1 = new OutputImage(width, height, numOfElements,
-				child_list1);
-		child_image2 = new OutputImage(width, height, numOfElements,
-				child_list2);
+		child_image1 = new OutputImage(width, height, numOfElements, child_list1);
+		child_image2 = new OutputImage(width, height, numOfElements, child_list2);
 		children_image.add(child_image1);
 		children_image.add(child_image2);
+		
 		return children_image;
 	}
 
@@ -188,16 +197,16 @@ public class Algorithm
 						_positionY = height;
 					else if (_positionY < 0)
 						_positionY = 0;
-				} else if (mutationSize < noChangesProbability + 2.0
-						* parameterMutationProbability)
+				} 
+				else if (mutationSize < noChangesProbability + 2.0 * parameterMutationProbability)
 				{
-					_radius += gaussRandom(mutationSize)
-							* ((width + height) / 4.0);
+					_radius += gaussRandom(mutationSize) * ((width + height) / 4.0);
 					if (_radius > ((width + height) / 2.0))
 						_radius = (int) ((width + height) / 2.0);
 					else if (_radius < 0)
 						_radius = 0;
-				} else
+				} 
+				else
 				{
 					_red += gaussRandom(mutationSize) * 255;
 					if (_red > 255)
@@ -219,13 +228,11 @@ public class Algorithm
 
 				}
 
-				Individual newElements = new Individual(_radius, _positionX,
-						_positionY, new Color(_red, _green, _blue));
+				Individual newElements = new Individual(_radius, _positionX, _positionY, new Color(_red, _green, _blue));
 				_elements.add(newElements);
 			}
 
-			finalChild.add(new OutputImage(width, height, singleImage
-					.getNumOfElements(), _elements));
+			finalChild.add(new OutputImage(width, height, singleImage.getNumOfElements(), _elements));
 		}
 
 		return finalChild;
@@ -243,6 +250,7 @@ public class Algorithm
 			r = 0;
 		if (r > 1.0)
 			r = 0;
+		
 		return r;
 	}
 

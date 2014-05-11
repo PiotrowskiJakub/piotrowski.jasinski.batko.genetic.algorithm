@@ -21,21 +21,28 @@ public class OutputImage extends JPanel implements Runnable
 {
 	private static final long serialVersionUID = -6184846121081330233L;
 	private int width, height, numOfElements, counter;
-	private LinkedList<Individual> elements = new LinkedList<Individual>(); // we
-																			// draw
-																			// all
-																			// elements
-																			// in
-																			// this
-																			// list
-																			// on
-																			// output
-																			// image
-	private Algorithm algorithm;
-	private JLabel lab_numberOfGeneration, lab_numberOfFitness;
-	private double fitness;
-	private boolean evolutionCondition;
-	/*********************************************************************************************************************************************************** */
+	private LinkedList<Individual> elements = new LinkedList<Individual>(); // list of elements that we draw on an image
+	private Algorithm algorithm;	// evolution algorithm
+	private JLabel lab_numberOfGeneration, lab_numberOfFitness;	// references to JLabels that we update after each generation
+	private double fitness;	// this shows how this image is similar to original one
+	private boolean evolutionCondition;	// boolean condition to check evolution loop
+	
+	// CONSTRUCTORS ***********************************************************************************************************
+	
+	public OutputImage(int width, int height, int numOfElements,
+			LinkedList<Individual> elements)
+	{
+		setWidth(width);
+		setHeight(height);
+		setNumOfElements(numOfElements);
+		setElements(elements);
+	}
+
+	public OutputImage()
+	{
+	}
+	
+	// SETTERS *************************************************************************************************************
 
 	public void setWidth(int width)
 	{
@@ -87,7 +94,7 @@ public class OutputImage extends JPanel implements Runnable
 		this.counter = counter;
 	}
 
-	/*********************************************************************************************************************************************************** */
+	// GETTERS *****************************************************************************************************************
 
 	public int getWidth()
 	{
@@ -113,7 +120,8 @@ public class OutputImage extends JPanel implements Runnable
 	{
 		return fitness;
 	}
-	/*********************************************************************************************************************************************************** */
+	
+	// ********************************************************************************************************************
 
 	/**
 	 * Function convert output image into BufferedImage
@@ -146,23 +154,10 @@ public class OutputImage extends JPanel implements Runnable
 		}
 	}
 
-	/************************************************************************************************************************************************************
-	 * 
-	 * Constructors
+	/**
+	 * This function is infinite loop with genetic algorithm that generates new generations of images
+	 * This function run when we make a thread with this class as implementation of runnable interface
 	 */
-	public OutputImage(int width, int height, int numOfElements,
-			LinkedList<Individual> elements)
-	{
-		setWidth(width);
-		setHeight(height);
-		setNumOfElements(numOfElements);
-		setElements(elements);
-	}
-
-	public OutputImage()
-	{
-	}
-
 	@Override
 	public void run()
 	{
