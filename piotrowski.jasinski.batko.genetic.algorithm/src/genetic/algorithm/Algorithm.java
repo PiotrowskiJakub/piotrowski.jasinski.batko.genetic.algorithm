@@ -49,6 +49,7 @@ public class Algorithm
 		SecureRandom rand = new SecureRandom();
 		int width = originalImage.getWidth();
 		int height = originalImage.getHeight();
+		int limitDiameter = Math.min(width, height)/4;
 		for (int i = 0; i < numOfElements; i++)
 		{
 			float r = rand.nextFloat();
@@ -56,7 +57,7 @@ public class Algorithm
 			float b = rand.nextFloat();
 			float a = rand.nextFloat();
 			Color randomColor = new Color(r, g, b, a);
-			elements.add(new Individual(rand.nextInt((int) (Math.min(width, height)/4)) + 1, rand.nextInt(width),
+			elements.add(new Individual(rand.nextInt(limitDiameter) + 1, rand.nextInt(width),
 					rand.nextInt(height), randomColor));
 		}
 
