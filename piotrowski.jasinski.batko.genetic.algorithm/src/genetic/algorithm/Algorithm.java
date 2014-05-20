@@ -163,12 +163,10 @@ public class Algorithm
 
 	private LinkedList<OutputImage> mutation(LinkedList<OutputImage> pattern_list)
 	{
-
+		LinkedList<OutputImage> finalChild = new LinkedList<OutputImage>();
 		LinkedList<Individual> _elements = new LinkedList<Individual>();
 		int width = pattern_list.get(0).getWidth();
 		int height = pattern_list.get(0).getHeight();
-
-		LinkedList<OutputImage> finalChild = new LinkedList<OutputImage>();
 
 		for (OutputImage singleImage : pattern_list)
 		{
@@ -180,7 +178,8 @@ public class Algorithm
 				int _red = pat.getColor().getRed();
 				int _green = pat.getColor().getGreen();
 				int _blue = pat.getColor().getBlue();
-
+				int _alpha = pat.getColor().getAlpha();
+				
 				double mutationSize = Math.random();
 				double noChangesProbability = 1.0 - mutationProbability;
 				double parameterMutationProbability = mutationProbability / 3.0;
@@ -227,17 +226,22 @@ public class Algorithm
 					else if (_blue < 0)
 						_blue = 0;
 
+					_alpha += gaussRandom(mutationSize) * 255;
+					if(_alpha > 255)
+						_alpha = 255;
+					else if (_alpha < 0)
+						_alpha = 0;
 				}
 
-				Individual newElements = new Individual(_radius, _positionX, _positionY, new Color(_red, _green, _blue));
+				Individual newElements = new Individual(_radius, _positionX, _positionY, new Color(_red, _green, _blue, _alpha));
 				_elements.add(newElements);
 			}
 
 			finalChild.add(new OutputImage(width, height, singleImage.getNumOfElements(), _elements));
+			_elements.clear();
 		}
 
 		return finalChild;
-
 	}
 
 	private double gaussRandom(double mutationSize)
@@ -299,47 +303,6 @@ public class Algorithm
 		outputs.clear();
 		int i = 0;
 		LinkedList<OutputImage> children_list = new LinkedList<OutputImage>();
-
-		// WERSJA NASZA
-		// int mother = 0;
-		// int father = 0;
-		// while (i < populationSize)
-		// {
-		// if (mother != father)
-		// {
-		//
-		// double mutationSize = Math.random();
-		//
-		// if(mutationSize >= mutationProbability){
-		// children_list = mutation(crossover(elites.get(mother),
-		// elites.get(father)));
-		// }else{
-		// children_list = crossover(elites.get(mother), elites.get(father));
-		// }
-		//
-		// outputs.add(children_list.get(0));
-		// outputs.add(children_list.get(1));
-		// // geneticImages[i] = reproduct(eliteImages[mother],
-		// // eliteImages[father]);
-		// i++;
-		// if (i >= populationSize)
-		// break;
-		// }
-		//
-		// father++;
-		// if (father >= eliteSize)
-		// {
-		// mother++;
-		// father = 0;
-		// }
-		// if (mother >= eliteSize)
-		// {
-		// mother = 0;
-		// father = 1;
-		// }
-		// }
-
-		// WERSJA PROWADZACEGO
 
 		for (int j = 0; j < eliteSize - 1; j += 2)
 		{

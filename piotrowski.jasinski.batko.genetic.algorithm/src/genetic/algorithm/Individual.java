@@ -8,7 +8,7 @@ import java.awt.Color;
  * @version 1.0
  * Class represents one element, in this case circle
  */
-public class Individual
+public class Individual implements Comparable<Individual>
 {
 	private int radius;	// radius should be lower than width and height original image
 	private int positionX, positionY;	// also should be somewhere on a image (minus width and height)
@@ -40,5 +40,16 @@ public class Individual
 	public Color getColor()
 	{
 		return color;
+	}
+
+	@Override
+	public int compareTo(Individual o)
+	{
+		int ret;
+		if(radius == o.getRadius())
+			ret = 0;
+		else
+			ret = (radius < o.getRadius()) ? 1 : -1;
+		return ret;
 	}
 }

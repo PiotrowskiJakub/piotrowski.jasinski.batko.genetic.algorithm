@@ -2,13 +2,12 @@ package gui;
 
 import genetic.algorithm.Algorithm;
 import genetic.algorithm.Individual;
-
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.LinkedList;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -146,6 +145,9 @@ public class OutputImage extends JPanel implements Runnable
 	{
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D) g;
+		
+		Collections.sort(elements);
+		
 		for (Individual i : elements)
 		{
 			g2.setColor(i.getColor());
