@@ -193,12 +193,10 @@ public class Gui extends JFrame
 			{
 				if(algorithm == null)
 				{
+					tex_populationSize.setEditable(false);
+					tex_numOfElements.setEditable(false);
 					tex_eliteSize.setText(Integer.toString((Integer
 							.parseInt(tex_populationSize.getText()) / 2)));
-					
-					originalImage.drawImage(imagePath);
-					originalImage.setPreferredSize(new Dimension(originalImage
-							.getWidth(), originalImage.getHeight()));
 
 					algorithm = new Algorithm(Integer.parseInt(tex_populationSize
 							.getText()), Integer.parseInt(tex_eliteSize.getText()),
@@ -253,12 +251,27 @@ public class Gui extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			outputImage.setEvolutionCondition(false);
 			algorithm = null;
 			start.setText("Start");
 			JFileChooser chooser = new JFileChooser("img/");
 			chooser.showOpenDialog(Gui.this);
-			imagePath = chooser.getSelectedFile();
-			tex_imagePath.setText(imagePath.getName());
+			if((imagePath = chooser.getSelectedFile()) != null)
+			{
+				tex_populationSize.setEditable(true);
+				tex_numOfElements.setEditable(true);
+				tex_imagePath.setText(imagePath.getName());
+				
+				originalImage.drawImage(imagePath);
+				originalImage.setPreferredSize(new Dimension(originalImage
+						.getWidth(), originalImage.getHeight()));
+				
+				Gui.this.repaint();
+				Gui.this.pack();
+				Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+				Gui.this.setLocation(dim.width / 2 - Gui.this.getSize().width
+						/ 2, dim.height / 2 - Gui.this.getSize().height / 2);
+			}
 		}
 	}
 }

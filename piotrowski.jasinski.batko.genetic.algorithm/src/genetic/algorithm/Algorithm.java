@@ -164,12 +164,12 @@ public class Algorithm
 	private LinkedList<OutputImage> mutation(LinkedList<OutputImage> pattern_list)
 	{
 		LinkedList<OutputImage> finalChild = new LinkedList<OutputImage>();
-		LinkedList<Individual> _elements = new LinkedList<Individual>();
 		int width = pattern_list.get(0).getWidth();
 		int height = pattern_list.get(0).getHeight();
 
 		for (OutputImage singleImage : pattern_list)
 		{
+			LinkedList<Individual> _elements = new LinkedList<Individual>();
 			for (Individual pat : singleImage.getElements())
 			{
 				int _positionX = pat.getPositionX();
@@ -238,7 +238,6 @@ public class Algorithm
 			}
 
 			finalChild.add(new OutputImage(width, height, singleImage.getNumOfElements(), _elements));
-			_elements.clear();
 		}
 
 		return finalChild;
@@ -259,15 +258,20 @@ public class Algorithm
 		return r;
 	}
 
-	public OutputImage evolution()
+	public synchronized OutputImage evolution()
 	{
 		LinkedList<OutputImage> elites = new LinkedList<OutputImage>();
 		int nowBestIndex = 0; // index of the best image in this generation
 
 		for (int i = 0; i < outputs.size(); i++)
 		{
-			outputs.get(i).setFitness(
-					compareImage(outputs.get(i).convertToImage()));
+			try
+			{
+				outputs.get(i).setFitness(compareImage(outputs.get(i).convertToImage()));
+			}catch (IndexOutOfBoundsException e)
+			{
+				System.out.println("Can't refer to element !!!");
+			}
 		}
 
 		for (int i = 0; i < eliteSize; i++)
@@ -292,10 +296,16 @@ public class Algorithm
 		double actualBest = elites.get(nowBestIndex).getFitness();
 		for (int i = 0; i < elites.size(); i++)
 		{
-			if (actualBest < elites.get(i).getFitness())
+			try
 			{
-				nowBestIndex = i;
-				actualBest = elites.get(i).getFitness();
+				if (actualBest < elites.get(i).getFitness())
+				{
+					nowBestIndex = i;
+					actualBest = elites.get(i).getFitness();
+				}
+			}catch (IndexOutOfBoundsException e)
+			{
+				System.out.println("Can't refer to element !!!");
 			}
 		}
 
@@ -308,13 +318,19 @@ public class Algorithm
 		{
 			double mutationSize = Math.random();
 
-			if (mutationSize <= mutationProbability)
+			try
 			{
-				children_list = mutation(crossover(elites.get(j),elites.get(j + 1)));
-			} 
-			else
+				if (mutationSize <= mutationProbability)
+				{
+					children_list = mutation(crossover(elites.get(j),elites.get(j + 1)));
+				} 
+				else
+				{
+					children_list = crossover(elites.get(j), elites.get(j + 1));
+				}
+			}catch (IndexOutOfBoundsException e)
 			{
-				children_list = crossover(elites.get(j), elites.get(j + 1));
+				System.out.println("Can't refer to element !!!");
 			}
 
 			outputs.add(children_list.get(0));
@@ -334,15 +350,20 @@ public class Algorithm
 			{
 				double mutationSize = Math.random();
 	
-				if (mutationSize <= mutationProbability)
+				try
 				{
-					children_list = mutation(crossover(elites.get(randomMember1), elites.get(randomMember2)));
-				} 
-				else
+					if (mutationSize <= mutationProbability)
+					{
+						children_list = mutation(crossover(elites.get(randomMember1), elites.get(randomMember2)));
+					} 
+					else
+					{
+						children_list = crossover(elites.get(randomMember1), elites.get(randomMember2));
+					}
+				}catch (IndexOutOfBoundsException e)
 				{
-					children_list = crossover(elites.get(randomMember1), elites.get(randomMember2));
+					System.out.println("Can't refer to element !!!");
 				}
-	
 				outputs.add(children_list.get(0));
 				outputs.add(children_list.get(1));
 				i += 2;
