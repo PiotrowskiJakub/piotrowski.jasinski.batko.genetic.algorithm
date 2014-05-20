@@ -378,4 +378,9 @@ public class Algorithm
 		Random rand = new Random();
 		return outputs.get(rand.nextInt(populationSize));
 	}
+
+	public void setMutationProbability(double mutationProbability)
+	{
+		this.mutationProbability = mutationProbability;
+	}
 }

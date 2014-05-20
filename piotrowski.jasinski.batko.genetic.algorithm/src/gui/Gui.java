@@ -33,7 +33,7 @@ public class Gui extends JFrame
 			lab_numberOfGeneration, lab_fitness, lab_numberOfFitness;
 	private JTextField tex_imagePath, tex_populationSize, tex_eliteSize,
 			tex_numOfElements, tex_mutationProbability;
-	private JButton load, start, stop;
+	private JButton load, start, stop, update;
 	private OriginalImage originalImage;
 	private OutputImage outputImage;
 	private File imagePath;
@@ -108,12 +108,17 @@ public class Gui extends JFrame
 		lab_mutationProbability = new JLabel("The probability of mutation: ");
 		lab_mutationProbability.setPreferredSize(new Dimension(200, 50));
 		tex_mutationProbability = new JTextField("0.01", 10);
+		update = new JButton("Update");
+		update.addActionListener(new UpdateListener());
 		c.gridx = 0;
 		c.gridy = 5;
 		mainPanel.add(lab_mutationProbability, c);
 		c.gridx = 1;
 		c.gridy = 5;
 		mainPanel.add(tex_mutationProbability, c);
+		c.gridx = 2;
+		c.gridy = 5;
+		mainPanel.add(update, c);
 
 		// 6 row
 		start = new JButton("Start");
@@ -158,7 +163,7 @@ public class Gui extends JFrame
 		c.gridx = 1;
 		c.gridy = 9;
 		mainPanel.add(lab_numberOfFitness, c);
-
+		
 		this.getContentPane().add(mainPanel);
 		this.pack();
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -273,5 +278,29 @@ public class Gui extends JFrame
 						/ 2, dim.height / 2 - Gui.this.getSize().height / 2);
 			}
 		}
+	}
+	
+	private class UpdateListener implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			if(Double.parseDouble(tex_mutationProbability.getText()) > 0.1)
+				JOptionPane.showMessageDialog(Gui.this,
+						"Mutation probability is too high.", "Incorrect probability of mutation",
+						JOptionPane.ERROR_MESSAGE);
+			else
+			{
+				if(algorithm != null)
+				{
+					algorithm.setMutationProbability(Double.parseDouble(tex_mutationProbability.getText()));
+					JOptionPane.showMessageDialog(Gui.this,
+							"The probability of mutation successfully changed.", "Changed",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		}
+		
 	}
 }
