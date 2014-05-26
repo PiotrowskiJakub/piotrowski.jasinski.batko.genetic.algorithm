@@ -379,7 +379,7 @@ public class Algorithm
 		return outputs.get(rand.nextInt(populationSize));
 	}
 
-	public void setMutationProbability(double mutationProbability)
+	public synchronized void setMutationProbability(double mutationProbability)
 	{
 		this.mutationProbability = mutationProbability;
 	}
